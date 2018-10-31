@@ -1,3 +1,4 @@
+#include <cmath>
 #include "physics.hpp"
 
 Physics::Physics(std::map<std::string, std::string>* cfg) 
@@ -36,10 +37,37 @@ Physics::~Physics()
 
 void Physics::update()
 {
-    double r_x = abs(b1->x - b2->x);
-    double r_y = abs(b1->y - b2->y);
-    double f_x = G * b1->mass_kg * b2->mass_kg / (r_x * r_x);
-    double f_y = G * b1->mass_kg * b2->mass_kg / (r_y * r_y);
+    double r_x = b2->x - b1->x;
+    double r_y = b2->y - b1->y;
+    double r = sqrt((r_x * r_x) + (r_y * r_y));
+    double sina = (r_y / r);
+    double cosa = r_x / r;
+    double f = G * b1->mass_kg * b2->mass_kg / (r * r);
 
+    if (r <= b1->radius + b2->radius)
+    {
+        b1->a_x = b1->a_y = b1->v_x = b1->v_y = b2->a_x = b2->a_y = b2->v_x = b2->v_y = 0;
+        return;
+    }
+
+    b1->a_x = (f * cosa) / b1->mass_kg;
+    b2->a_x =  -(f * cosa) / b2->mass_kg;
+
+    b1->a_y = (f * sina) / b1->mass_kg;
+    b2->a_y = -(f * sina) / b2->mass_kg;
+
+    b1->v_x += b1->a_x;
+    b2->v_x += b2->a_x;
     
+    b1->v_y += b1->a_y;
+    b2->v_y += b2->a_y;
+
+    b1->x += b1->v_x;
+    b2->x += b2->v_x;
+
+    b1->y += b1->v_y;
+    b2->y += b2->v_y;
+
+    std::cout << "Velocity (1x 2x 1y 2y): " << b1->v_x << " " << b1->v_y << " " << b2->v_x << " " << b2->v_y << std::endl;
+    std::cout << "Acceleration (1x 2x 1y 2y): " << b1->a_x << " " << b1->a_y << " " << b2->a_x << " " << b2->a_y << std::endl;
 }

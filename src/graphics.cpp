@@ -10,7 +10,14 @@ Graphics::Graphics(std::map<std::string, std::string>* cfg)
     if (!init_self())
     {
         error = 1;
+        return;
     }
+    
+    if (TTF_Init() == -1)
+    {
+        std::cout << "TTF: TTF_Init error! " << TTF_GetError() << "\n" << std::flush;
+    }
+
     error  = 0;
 }
 
@@ -33,7 +40,7 @@ bool Graphics::init_self()
 
     if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
     {
-        std::cout << "SDL_IMG: PNG module init error! " << SDL_GetError() << "\n" << std::flush;/* Main loop with a set *average* framerate */
+        std::cout << "SDL_IMG: PNG module init error! " << IMG_GetError() << "\n" << std::flush;/* Main loop with a set *average* framerate */
         return 0;
     }
 
@@ -57,11 +64,14 @@ bool Graphics::init_self()
     first_body_texture = create_texture("resources/first_body.png");;
     second_body_texture = create_texture("resources/second_body.png");
     background_texture = create_texture("resources/background.png");
+
     /* Background color */
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
-    std::cout << "window: " << win_w << " x " << win_h << " px\n" << std::flush;
+    /* Create font */
+    font = TTF_OpenFont("resources/font/SometypeMono-Regular.ttf", 16);
 
+    /* Set background rect */
     rect.x = rect.y = rect.w = rect.h = background_rect.x = background_rect.y = 0;
     background_rect.w = win_w;
     background_rect.h = win_h;
@@ -89,8 +99,8 @@ SDL_Texture* Graphics::create_texture(const std::string& png_path)
 
 void Graphics::render_body(const Body* b, SDL_Texture* t)
 {
-    rect.x = b->x;
-    rect.y = b->y;
+    rect.x = b->x - b->radius;
+    rect.y = b->y - b->radius;
     rect.w = rect.h = 2 * b->radius;
 
     SDL_RenderCopy(renderer, t, NULL, &rect);

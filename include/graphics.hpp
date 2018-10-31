@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include "physics.hpp"
 
 class Graphics
@@ -27,8 +28,10 @@ class Graphics
         /* Render a body */
         void render_body(const Body* b, SDL_Texture* t);
 
-        /* Display all drawable objects */
+        /* Display background and two bodies */
         void display_all(Physics* phys);
+
+        /* Display text at given place */
 
     private:
         /* Window width */
@@ -40,15 +43,18 @@ class Graphics
         /* Window title */
         std::string win_title;
 
-        /* Pointers to the SDL window, renderer and textures  */
+        /* Pointers to the SDL window, renderer, font and textures  */
         SDL_Window* window;
         SDL_Renderer* renderer;
+        TTF_Font* font;
         SDL_Texture* first_body_texture;
         SDL_Texture* second_body_texture;
         SDL_Texture* background_texture;
+        SDL_Texture* text_texture;
 
         /* Universal Rects for drawing */
         SDL_Rect rect;
+        SDL_Rect text_rect;
         SDL_Rect background_rect;
 };
 
