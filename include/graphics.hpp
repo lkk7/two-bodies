@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <sstream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include "physics.hpp"
@@ -32,6 +33,10 @@ class Graphics
         void display_all(Physics* phys);
 
         /* Display text at given place */
+        void display_text(std::string s, int x, int y);
+
+        /* Return string version of a variable (helper function for display_all) */
+        std::string return_string(double x);
 
     private:
         /* Window width */
@@ -56,6 +61,9 @@ class Graphics
         SDL_Rect rect;
         SDL_Rect text_rect;
         SDL_Rect background_rect;
+
+        /* Stringstream used for outputting text */
+        std::stringstream ss;
 };
 
 #endif
