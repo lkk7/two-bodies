@@ -33,7 +33,6 @@ int main()
     };
     
     if (!readcfg(*cfg)) return 1;
-    
     Graphics* graphics = new Graphics(cfg);
     Physics* physics = new Physics(cfg);
 
