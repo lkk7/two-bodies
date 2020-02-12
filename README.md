@@ -1,4 +1,4 @@
-# particles_box
+# two-bodies
 A two-body gravitation problem graphical simulation.
 
 ------------
